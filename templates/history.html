@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+
+{% block title %}History{% endblock %}
+
+{% block content %}
+
+<!-- history.html -->
+<h1>History Page</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price Buy</th>
+            <th>Status</th>
+            <th>Date In</th>
+            <!-- Add more columns as needed -->
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for watch in watches %}
+            <tr>
+                <td>{{ watch.id }}</td>
+                <td>{{ watch.SKU }}</td>
+                <td>{{ watch.price_buy }}</td>
+                <td>{{ watch.status.name }}</td>
+                <td>{{ watch.date_in }}</td>
+                <!-- Add more columns as needed -->
+                <td>
+                    <form method="post" action="{{ url_for('history') }}">
+                        <input type="hidden" name="watch_id" value="{{ watch.id }}">
+                        <select name="new_status_id">
+                            <option value="1">AVAILABLE</option>
+                            <option value="2">SOLD</option>
+                            <option value="3">RETURNED</option>
+                            <!-- Add more status options as needed -->
+                        </select>
+                        <button type="submit">Modify</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

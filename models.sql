@@ -1,0 +1,16 @@
+CREATE TABLE status (
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(20) NOT NULL UNIQUE
+);
+
+CREATE TABLE watch (
+    id INTEGER PRIMARY KEY,
+    SKU VARCHAR(255) NOT NULL,
+    price_buy FLOAT NOT NULL,
+    date_in TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    status_id INTEGER DEFAULT 1 NOT NULL,
+    date_out TIMESTAMP,
+    price_sell FLOAT,
+    profit FLOAT,
+    FOREIGN KEY (status_id) REFERENCES status (id)
+);

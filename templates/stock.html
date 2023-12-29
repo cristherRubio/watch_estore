@@ -1,0 +1,114 @@
+{% extends 'layout.html' %}
+
+{% block title %}Stock{% endblock %}
+
+{% block content %}
+
+<h2>Add watch</h2>
+
+<!-- Add a form to add new item -->
+<form method="post" action="{{ url_for('stock') }}">
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="SKU">SKU:</label>
+            <input type="text" class="form-control" id="SKU" name="SKU" required>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="price_buy">Cost:</label>
+            <input type="text" class="form-control" id="price_buy" name="price_buy" required>
+        </div>
+        <div class="form-group col-md-4">
+            <button type="submit" class="btn btn-primary">Add Item</button>
+        </div>
+    </div>
+</form>
+
+<h2>Stock</h2>
+
+<!-- Display the table of items -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Cost</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for watch in watches %}
+            <tr>
+                <td>{{ watch.id }}</td>
+                <td>{{ watch.SKU }}</td>
+                <td>{{ watch.status.name }}</td>
+                <td>
+                    <a href="{{ url_for('update_status', watch_id=watch.id, status_id=2) }}" class="btn btn-success">Sold</a>
+                </td>
+                <td>
+                    <a href="{{ url_for('update_status', watch_id=watch.id, status_id=3) }}" class="btn btn-success">Returned</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- JavaScript for modal -->
+<script>
+    // Function to show the modal when the "Sold" button is clicked
+    function showModal(watchId) {
+        // Display the modal
+        $('#modal').modal('show');
+
+        // Set the watchId in a hidden input field
+        $('#watchIdInput').val(watchId);
+    }
+
+    // Function to handle form submission in the modal
+    function submitModal() {
+        // Get values from the modal form
+        var storeValue = $('#storeDropdown').val();
+        var sellPrice = $('#sellPriceInput').val();
+
+        // Perform any validation or additional processing as needed
+
+        // Submit the form to update the status
+        var watchId = $('#watchIdInput').val();
+        window.location.href = '/update_status/' + watchId + '/2';  // Assuming status_id 2 is for "SOLD"
+    }
+</script>
+
+<!-- Modal for "SOLD" status -->
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Sold Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="storeDropdown">Store:</label>
+                        <select class="form-control" id="storeDropdown">
+                            <option value="store1">Store 1</option>
+                            <option value="store2">Store 2</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sellPriceInput">Sell Price:</label>
+                        <input type="text" class="form-control" id="sellPriceInput">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="submitModal()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
